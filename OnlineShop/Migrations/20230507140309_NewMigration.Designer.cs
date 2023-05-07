@@ -12,8 +12,8 @@ using OnlineShop.AppDbContext;
 namespace OnlineShop.Migrations
 {
     [DbContext(typeof(ShopDbContext))]
-    [Migration("20230507110123_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20230507140309_NewMigration")]
+    partial class NewMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,6 +113,9 @@ namespace OnlineShop.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

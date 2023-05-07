@@ -15,6 +15,8 @@ namespace OnlineShop.Settings
         {
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IProductService, ProductService>();
         }
 
         private static void AddRepositories(IServiceCollection services)
@@ -22,6 +24,9 @@ namespace OnlineShop.Settings
             services.AddScoped<UnitOfWork>();
             services.AddScoped<UserRepository>();
             services.AddScoped<RoleRepository>();
+            services.AddScoped<OrderRepository>();
+            services.AddScoped<ProductRepository>();
+            services.AddScoped<ShopRepository>();
         }
         #endregion
 

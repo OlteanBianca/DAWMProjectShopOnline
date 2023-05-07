@@ -11,6 +11,9 @@ namespace OnlineShop.Entities
         [Required]
         public double Price { get; set; }
 
+        [Required]
+        public bool IsDeleted { get; set; } = false;
+
         public ICollection<Inventory> Inventories { get; } = new List<Inventory>();
         public ICollection<OrderedProduct> OrderedProducts { get; } = new List<OrderedProduct>();
         #endregion
