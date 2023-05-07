@@ -1,4 +1,5 @@
-﻿using OnlineShop.AppDbContext;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.AppDbContext;
 using OnlineShop.Entities;
 
 namespace OnlineShop.Repositories
@@ -8,5 +9,35 @@ namespace OnlineShop.Repositories
         public ProductRepository(ShopDbContext dbContext) : base(dbContext)
         {
         }
+
+
+        #region Public Methods
+        public new async Task<List<Product>> GetAll()
+        {
+            return await _dbContext.Products.Where(s => s.IsDeleted == false).ToListAsync();
+        }
+
+        public new async Task<Product?> GetById(int id)
+        {
+            var product = await _dbContext.Products.FirstOrDefaultAsync(s => s.Id == id);
+
+            if(product == null)
+            {
+                return null;
+            }
+
+            if(product.IsDeleted == true)
+            {
+                return null;
+            }
+
+            return product;
+        }
+
+        public async Task<Product?> FindProductByName(string name)
+        {
+            return await _dbContext.Products.FirstOrDefaultAsync(e => e.Name == name);
+        }
+        #endregion
     }
 }
