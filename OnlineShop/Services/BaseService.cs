@@ -1,4 +1,4 @@
-﻿using AuthorizationApp.Repositories;
+﻿using OnlineShop.Repositories;
 
 namespace OnlineShop.Services
 {

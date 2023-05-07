@@ -1,6 +1,6 @@
 ﻿using OnlineShop.AppDbContext;
 
-namespace AuthorizationApp.Repositories
+namespace OnlineShop.Repositories
 {
     public class UnitOfWork
     {
@@ -9,17 +9,16 @@ namespace AuthorizationApp.Repositories
         #endregion
 
         #region Properties
-        //public StudentRepository Students { get; }
-        //public ClassRepository Classes { get; }
-        //public RoleRepository Roles { get; }
-        //public UserRepository Users { get; }
-        //public GradeRepository Grades { get; }
+        public RoleRepository Roles { get; }
+        public UserRepository Users { get; }
         #endregion
 
         #region Constructors
-        public UnitOfWork(ShopDbContext dbContext)
+        public UnitOfWork(ShopDbContext dbContext, RoleRepository roleRepository, UserRepository userRepository)
         {
             _dbContext = dbContext;
+            Roles = roleRepository;
+            Users = userRepository;
         }
         #endregion
 

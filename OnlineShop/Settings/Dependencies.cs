@@ -1,8 +1,8 @@
-﻿using AuthorizationApp.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OnlineShop.AppDbContext;
+using OnlineShop.Repositories;
 using OnlineShop.Services;
 using System.Text;
 
@@ -14,11 +14,14 @@ namespace OnlineShop.Settings
         private static void AddServices(IServiceCollection services)
         {
             services.AddTransient<IAuthorizationService, AuthorizationService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         private static void AddRepositories(IServiceCollection services)
         {
             services.AddScoped<UnitOfWork>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<RoleRepository>();
         }
         #endregion
 

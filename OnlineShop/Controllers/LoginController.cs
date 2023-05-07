@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.DTOs;
+using OnlineShop.Services;
 
 namespace OnlineShop.Controllers
 {
@@ -9,51 +11,51 @@ namespace OnlineShop.Controllers
     public class LoginController : ControllerBase
     {
         #region Private Fields
-        //private readonly IUserService _userService;
+        private readonly IUserService _userService;
         #endregion
 
         #region Constructors
-        public LoginController()
+        public LoginController(IUserService userService)
         {
-            //_userService = userService;
+            _userService = userService;
         }
         #endregion
 
         #region Public Methods
 
-        //[HttpPost("/register")]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> Register(RegisterDTO payload)
-        //{
-        //    LoginDTO? user = await _userService.Register(payload);
+        [HttpPost("/register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterDTO payload)
+        {
+            LoginDTO? user = await _userService.Register(payload);
 
-        //    if (user == null)
-        //    {
-        //        return BadRequest("Credentials not valid!");
-        //    }
+            if (user == null)
+            {
+                return BadRequest("Credentials not valid!");
+            }
 
-        //    string jwtToken = await _userService.Validate(user);
-        //    return Ok(new { token = jwtToken });
-        //}
+            string jwtToken = await _userService.Validate(user);
+            return Ok(new { token = jwtToken });
+        }
 
-        //[HttpPost("/login")]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> Login(LoginDTO payload)
-        //{
-        //    if (await _userService.FindUserByEmail(payload.Email) == null)
-        //    {
-        //        return BadRequest("Invalid email!");
-        //    }
+        [HttpPost("/login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginDTO payload)
+        {
+            if (await _userService.FindUserByEmail(payload.Email) == null)
+            {
+                return BadRequest("Invalid email!");
+            }
 
-        //    string jwtToken = await _userService.Validate(payload);
+            string jwtToken = await _userService.Validate(payload);
 
-        //    if (string.IsNullOrEmpty(jwtToken))
-        //    {
-        //        return BadRequest("Invalid password!");
-        //    }
+            if (string.IsNullOrEmpty(jwtToken))
+            {
+                return BadRequest("Invalid password!");
+            }
 
-        //    return Ok(new { token = jwtToken });
-        //}
+            return Ok(new { token = jwtToken });
+        }
         #endregion
     }
 }

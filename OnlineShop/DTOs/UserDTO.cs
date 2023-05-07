@@ -2,7 +2,7 @@
 
 namespace OnlineShop.DTOs
 {
-    public class RegisterDTO
+    public class UserDTO
     {
         #region Properties
         [Required]
@@ -10,9 +10,6 @@ namespace OnlineShop.DTOs
 
         [Required, MaxLength(50)]
         public string Name { get; set; } = string.Empty;
-
-        [Required, MaxLength(100)]
-        public string Password { get; set; } = string.Empty;
 
         [Required, MaxLength(50)]
         public string Email { get; set; } = string.Empty;
