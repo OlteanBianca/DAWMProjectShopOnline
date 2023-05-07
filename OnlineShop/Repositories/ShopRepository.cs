@@ -19,6 +19,11 @@ namespace OnlineShop.Repositories
             return await _dbContext.Shops.FirstOrDefaultAsync(shop => shop.Name == name) != null;
         }
 
+        public async Task<List<Shop>> GetShopsByUserId(int id)
+        {
+            return await _dbContext.Shops.Where(shop => shop.UserId == id).ToListAsync();
+        }
+
         #endregion
     }
 }

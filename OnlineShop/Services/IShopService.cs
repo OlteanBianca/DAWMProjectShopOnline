@@ -11,6 +11,8 @@ namespace OnlineShop.Services
 
         public Task<ShopDTO?> GetShopById(int id);
 
+        public Task<List<ShopDTO?>> GetShopsByUserId(int id);
+
         public Task<bool> CheckIfShopNameExists(string name);
         #endregion
     }

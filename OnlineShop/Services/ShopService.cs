@@ -50,6 +50,13 @@ namespace OnlineShop.Services
             Shop? shop = await _unitOfWork.Shops.GetById(id);
             return shop?.ToShopDTO();
         }
+
+        public async Task<List<ShopDTO?>> GetShopsByUserId(int id)
+        {
+            List<Shop> shops = await _unitOfWork.Shops.GetShopsByUserId(id);
+
+            return shops.ToShopDTOs();
+        }
         #endregion
     }
 }

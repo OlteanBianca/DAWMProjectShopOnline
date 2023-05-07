@@ -79,6 +79,17 @@ namespace OnlineShop.Controllers
             }
             return Ok(shop);
         }
+
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetByUserId(int id)
+        {
+            List<ShopDTO?> shops = await _shopService.GetShopsByUserId(id);
+            if (shops == null || shops.Count == 0)
+            {
+                return NotFound("The user has no shops!");
+            }
+            return Ok(shops);
+        }
         #endregion
     }
 }
