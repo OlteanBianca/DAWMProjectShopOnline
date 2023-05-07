@@ -13,6 +13,7 @@ namespace OnlineShop.Repositories
         public UserRepository Users { get; }
         public ShopRepository Shops { get; }
         public ProductRepository Products { get; }
+        public OrderRepository Orders { get; }
         #endregion
 
         #region Constructors

@@ -17,7 +17,7 @@ namespace OnlineShop.Services
         public async Task<List<ShopDTO?>> GetAllShops()
         {
             List<Shop> shops = await _unitOfWork.Shops.GetAll();
-            shops ??= new List<Shop>();
+            shops ??= new();
 
             return shops.ToShopDTOs();
         }
@@ -54,6 +54,7 @@ namespace OnlineShop.Services
         public async Task<List<ShopDTO?>> GetShopsByUserId(int id)
         {
             List<Shop> shops = await _unitOfWork.Shops.GetShopsByUserId(id);
+            shops ??= new();
 
             return shops.ToShopDTOs();
         }
