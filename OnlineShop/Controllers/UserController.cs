@@ -27,8 +27,17 @@ namespace OnlineShop.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO payload)
         {
-            LoginDTO? user = await _userService.Register(payload);
+            if(payload == null)
+            {
+                return BadRequest("User can't be null!");
+            }
 
+            if(await _userService.FindUserByEmail(payload.Email) != null)
+            {
+                return BadRequest("Email is already used!");
+            }
+
+            LoginDTO? user = await _userService.Register(payload);
             if (user == null)
             {
                 return BadRequest("Credentials not valid!");
