@@ -5,10 +5,18 @@ namespace OnlineShop.Services
 {
     public interface IOrderService
     {
+        #region Properties
         public Task<bool> AddOrder(List<AddOrderDTO> orderDTO);
-        public Task<IEnumerable<Order>> GetAllOrders();
+
+        public Task<List<Order>> GetAll();
+
         public Task<bool> Update(Order order);
+
         public Task<bool> Remove(Order order);
-        public Task<Order> GetOrderByID(int? id);
+
+        public Task<OrderDTO?> GetById(int id);
+
+        public Task<List<OrderDTO?>> GetByUserId(int userId);
+        #endregion
     }
 }

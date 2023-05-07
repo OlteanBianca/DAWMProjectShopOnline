@@ -6,16 +6,16 @@ using OnlineShop.Services;
 namespace OnlineShop.Controllers
 {
     [ApiController]
-    [Route("login")]
+    [Route("user")]
     [Authorize]
-    public class LoginController : ControllerBase
+    public class UserController : ControllerBase
     {
         #region Private Fields
         private readonly IUserService _userService;
         #endregion
 
         #region Constructors
-        public LoginController(IUserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
@@ -23,12 +23,21 @@ namespace OnlineShop.Controllers
 
         #region Public Methods
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO payload)
         {
-            LoginDTO? user = await _userService.Register(payload);
+            if(payload == null)
+            {
+                return BadRequest("User can't be null!");
+            }
 
+            if(await _userService.FindUserByEmail(payload.Email) != null)
+            {
+                return BadRequest("Email is already used!");
+            }
+
+            LoginDTO? user = await _userService.Register(payload);
             if (user == null)
             {
                 return BadRequest("Credentials not valid!");
@@ -38,7 +47,7 @@ namespace OnlineShop.Controllers
             return Ok(new { token = jwtToken });
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO payload)
         {
@@ -55,6 +64,17 @@ namespace OnlineShop.Controllers
             }
 
             return Ok(new { token = jwtToken });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            UserDTO? user = await _userService.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound("There is no user with that id!");
+            }
+            return Ok(user);
         }
         #endregion
     }
