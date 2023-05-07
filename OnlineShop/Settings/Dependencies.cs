@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OnlineShop.AppDbContext;
@@ -15,6 +15,7 @@ namespace OnlineShop.Settings
         {
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IShopService, ShopService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IProductService, ProductService>();
         }
@@ -48,23 +49,23 @@ namespace OnlineShop.Settings
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ClockSkew = TimeSpan.Zero,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero,
 
-                        ValidIssuer = "LabAPI-Backend",
-                        ValidAudience = "LabAPI-Anyone",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationBuilder.Configuration["JWT:SecurityKey"]))
-                    };
-                });
+                    ValidIssuer = "LabAPI-Backend",
+                    ValidAudience = "LabAPI-Anyone",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationBuilder.Configuration["JWT:SecurityKey"]))
+                };
+            });
 
             applicationBuilder.Services.AddAuthorization();
 

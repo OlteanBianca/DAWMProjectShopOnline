@@ -78,6 +78,19 @@ namespace OnlineShop.Services
             Role? role = await _unitOfWork.Roles.GetById(id);
             return role != null;
         }
+
+        public async Task<bool> UpdateUserToShopOwner(int id)
+        {
+            User? user = await _unitOfWork.Users.GetById(id);
+            if (user == null)
+            {
+                return false;
+            }
+            user.RoleId = 2;
+
+            _unitOfWork.Users.Update(user);
+            return await _unitOfWork.SaveChanges();
+        }
         #endregion
     }
 }
