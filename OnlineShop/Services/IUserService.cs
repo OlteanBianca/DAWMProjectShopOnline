@@ -18,6 +18,8 @@ namespace OnlineShop.Services
 
         public Task<bool> IsRoleValid(int id);
 
+        public Task<bool> UpdateUserToShopOwner(int id);
+
         #endregion
     }
 }

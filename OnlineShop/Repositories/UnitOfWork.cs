@@ -11,14 +11,19 @@ namespace OnlineShop.Repositories
         #region Properties
         public RoleRepository Roles { get; }
         public UserRepository Users { get; }
+        public ShopRepository Shops { get; }
         #endregion
 
         #region Constructors
-        public UnitOfWork(ShopDbContext dbContext, RoleRepository roleRepository, UserRepository userRepository)
+        public UnitOfWork(ShopDbContext dbContext, 
+                          RoleRepository roleRepository, 
+                          UserRepository userRepository,
+                          ShopRepository shopRepository)
         {
             _dbContext = dbContext;
             Roles = roleRepository;
             Users = userRepository;
+            Shops = shopRepository;
         }
         #endregion
 
