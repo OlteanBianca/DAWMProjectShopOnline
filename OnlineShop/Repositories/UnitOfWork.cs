@@ -1,4 +1,4 @@
-﻿using OnlineShop.AppDbContext;
+using OnlineShop.AppDbContext;
 
 namespace OnlineShop.Repositories
 {
@@ -12,17 +12,20 @@ namespace OnlineShop.Repositories
         public RoleRepository Roles { get; }
         public UserRepository Users { get; }
         public ShopRepository Shops { get; }
+        public ProductRepository Products { get; }
         #endregion
 
         #region Constructors
         public UnitOfWork(ShopDbContext dbContext, 
                           RoleRepository roleRepository, 
                           UserRepository userRepository,
+                          ProductRepository productRepository,
                           ShopRepository shopRepository)
         {
             _dbContext = dbContext;
             Roles = roleRepository;
             Users = userRepository;
+            Products = productRepository;
             Shops = shopRepository;
         }
         #endregion
