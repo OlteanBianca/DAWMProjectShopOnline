@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using OnlineShop.DTOs;
 using OnlineShop.Services;
+using IAuthorizationService = OnlineShop.Services.IAuthorizationService;
 
 namespace OnlineShop.Controllers
 {
@@ -12,12 +14,16 @@ namespace OnlineShop.Controllers
     {
         #region Private Fields
         private readonly IOrderService _orderService;
+        private readonly IUserService _userService;
+        private readonly IAuthorizationService _authorizationService;
         #endregion
 
         #region Constructors
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IOrderService orderService, IAuthorizationService authorizationService, IUserService userService)
         {
             _orderService = orderService;
+            _authorizationService = authorizationService;
+            _userService = userService;
         }
         #endregion
 
@@ -49,6 +55,41 @@ namespace OnlineShop.Controllers
             }
             return Ok(orders);
         }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddOrder([FromBody] AddOrderDTO orderDTO)
+        {
+            if (orderDTO == null)
+            {
+                return BadRequest("Order can't be null!");
+            }
+
+            string? accessToken = Request.Headers[HeaderNames.Authorization];
+            if (accessToken == null)
+            {
+                return BadRequest("Access denied!");
+            }
+
+            int? id = _authorizationService.GetUserFromToken(accessToken);
+            if (id == null)
+            {
+                return BadRequest("Invalid token!");
+            }
+
+            UserDTO? user = await _userService.GetUserById((int)id);
+            if (user == null)
+            {
+                return NotFound("No user found!");
+            }
+
+
+            if (!await _orderService.AddOrder(orderDTO, (int)id))
+            {
+                return BadRequest("Credentials not valid!");
+            }
+            return Ok("Order added successfully!");
+        }
+
         #endregion
     }
 }

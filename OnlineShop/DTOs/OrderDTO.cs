@@ -12,7 +12,7 @@ namespace OnlineShop.DTOs
         [Required]
         public double TotalAmount { get; set; } = 0;
 
-        public ICollection<OrderedProduct> OrderedProducts { get; set; } = new List<OrderedProduct>();
+        public ICollection<OrderedProductDTO> OrderedProducts { get; set; } = new List<OrderedProductDTO>();
         #endregion
     }
 }

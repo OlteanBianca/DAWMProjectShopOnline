@@ -14,6 +14,7 @@ namespace OnlineShop.Repositories
         public ShopRepository Shops { get; }
         public ProductRepository Products { get; }
         public OrderRepository Orders { get; }
+        public OrderedProductRepository OrderedProducts { get; }
         #endregion
 
         #region Constructors
@@ -21,13 +22,17 @@ namespace OnlineShop.Repositories
                           RoleRepository roleRepository, 
                           UserRepository userRepository,
                           ProductRepository productRepository,
-                          ShopRepository shopRepository)
+                          ShopRepository shopRepository,
+                          OrderRepository orderRepository,
+                          OrderedProductRepository orderedProductRepository)
         {
             _dbContext = dbContext;
             Roles = roleRepository;
             Users = userRepository;
             Products = productRepository;
             Shops = shopRepository;
+            Orders = orderRepository;
+            OrderedProducts = orderedProductRepository;
         }
         #endregion
 

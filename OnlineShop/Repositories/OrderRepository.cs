@@ -16,6 +16,16 @@ namespace OnlineShop.Repositories
         {
             return await _dbContext.Orders.Where(order => order.UserId == userId).ToListAsync();
         }
+
+        public new async Task<List<Order>> GetAll()
+        {
+            return await _dbContext.Orders.Include(order => order.OrderedProducts).ToListAsync();
+        }
+
+        public new async Task<Order?> GetById(int id)
+        {
+            return await _dbContext.Orders.Include(order => order.OrderedProducts).FirstOrDefaultAsync(order => order.Id == id);
+        }
         #endregion
     }
 }

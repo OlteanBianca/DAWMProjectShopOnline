@@ -6,9 +6,9 @@ namespace OnlineShop.Services
     public interface IOrderService
     {
         #region Properties
-        public Task<bool> AddOrder(List<AddOrderDTO> orderDTO);
+        public Task<bool> AddOrder(AddOrderDTO orderDTO, int userId);
 
-        public Task<List<Order>> GetAll();
+        public Task<List<OrderDTO>> GetAll();
 
         public Task<bool> Update(Order order);
 

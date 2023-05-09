@@ -28,6 +28,7 @@ namespace OnlineShop.Settings
             services.AddScoped<OrderRepository>();
             services.AddScoped<ProductRepository>();
             services.AddScoped<ShopRepository>();
+            services.AddScoped<OrderedProductRepository>();
         }
         #endregion
 
