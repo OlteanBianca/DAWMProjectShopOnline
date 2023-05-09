@@ -11,12 +11,16 @@ namespace OnlineShop.Controllers
     [Authorize(Roles = "ShopOwner")]
     public class ProductsController : ControllerBase
     {
+        #region Private Fields
         private readonly IProductService _productService;
+        #endregion
 
+        #region Constructors
         public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
+        #endregion
 
         #region Public Methods
         [HttpPost("add")]   

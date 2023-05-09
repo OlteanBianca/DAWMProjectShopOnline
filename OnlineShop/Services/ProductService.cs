@@ -7,9 +7,9 @@ namespace OnlineShop.Services
 {
     public class ProductService : BaseService, IProductService
     {
-        public ProductService(UnitOfWork unitOfWork, IAuthorizationService authService) : base(unitOfWork, authService)
-        {
-        }
+        #region Constructors
+        public ProductService(UnitOfWork unitOfWork, IAuthorizationService authService) : base(unitOfWork, authService) { }
+        #endregion
 
         #region Interface Implementations
         public async Task<bool> AddProduct(ProductDTO productDTO)

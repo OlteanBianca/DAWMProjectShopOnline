@@ -95,16 +95,6 @@ namespace OnlineShop.Services
             return ordersDTO;
         }
 
-        public Task<bool> Update(Order order)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Remove(Order order)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<OrderDTO?> GetById(int id)
         {
             Order? order = await _unitOfWork.Orders.GetById(id);
