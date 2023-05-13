@@ -1,8 +1,7 @@
+using OnlineShop.Infrastructure.Middlewares;
 using OnlineShop.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddEndpointsApiExplorer();
 Dependencies.Inject(builder);
 
 var app = builder.Build();
@@ -17,11 +16,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseMiddleware<LoggingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

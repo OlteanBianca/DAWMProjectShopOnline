@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.AppDbContext;
+using OnlineShop.DTOs;
 using OnlineShop.Entities;
+using OnlineShop.Mappings;
 
 namespace OnlineShop.Repositories
 {
@@ -11,19 +13,21 @@ namespace OnlineShop.Repositories
         #endregion
 
         #region Public Methods
-        public async Task<List<Inventory>> GetAll(int userId)
+        public async Task<Dictionary<string, List<InventoryDTO>>> GetAll(int userId)
         {
            return await _dbContext.Inventories
                 .Include(e => e.Product)
                 .Include(e => e.Shop)            
                 .ThenInclude(e => e.User)
                 .Where(e => e.Shop.UserId == userId)
-                .ToListAsync();
+                .GroupBy(e => e.Shop.Name)
+                .Select(e => new { ShopName = e.Key, Products = e.ToList().ToInventoryDTOs() })
+               .ToDictionaryAsync(e => e.ShopName, e => e.Products);
         }
 
         public async Task<Inventory?> GetByShopIdAndProductId(int shopId, int productId)
         {
-            return await _dbContext.Inventories.FirstAsync(e => e.ShopId == shopId && e.ProductId == productId);
+            return await _dbContext.Inventories.FirstOrDefaultAsync(e => e.ShopId == shopId && e.ProductId == productId);
         }
         #endregion
     }

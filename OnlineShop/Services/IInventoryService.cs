@@ -7,7 +7,7 @@ namespace OnlineShop.Services
         #region Properties
         public Task<bool> AddToInventory(InventoryDTO inventoryDTO, int userId);
 
-        public Task<List<InventoryDTO>> GetAll(int userId);
+        public Task<Dictionary< string, List<InventoryDTO>>> GetAll(int userId);
 
         public Task<bool> Remove(InventoryDTO inventoryDTO, int userId);
 

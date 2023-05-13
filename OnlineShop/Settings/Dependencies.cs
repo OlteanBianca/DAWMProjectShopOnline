@@ -37,6 +37,7 @@ namespace OnlineShop.Settings
         #region Public Methods
         public static void Inject(WebApplicationBuilder applicationBuilder)
         {
+            applicationBuilder.Services.AddEndpointsApiExplorer();
             applicationBuilder.Services.AddControllers();
             applicationBuilder.Services.AddSwaggerGen();
 

@@ -23,6 +23,11 @@ namespace OnlineShop.Services
                 return false;
             }
 
+            if(product.IsDeleted == true)
+            {
+                return false;
+            }
+
             Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(shop.Id, product.Id);
 
             if (inventory == null)
@@ -69,9 +74,9 @@ namespace OnlineShop.Services
             return await _unitOfWork.SaveChanges();
         }
 
-        public async Task<List<InventoryDTO>> GetAll(int userId)
+        public async Task<Dictionary<string, List<InventoryDTO>>> GetAll(int userId)
         {
-            return (await _unitOfWork.Inventories.GetAll(userId)).ToInventoryDTOs();
+            return await _unitOfWork.Inventories.GetAll(userId);
         }
 
         public async Task<bool> Remove(InventoryDTO inventoryDTO, int userId)

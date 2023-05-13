@@ -7,7 +7,7 @@ using OnlineShop.Services;
 namespace OnlineShop.Controllers
 {
     [ApiController]
-    [Route("api/products")]
+    [Route("products")]
     [Authorize(Roles = "ShopOwner")]
     public class ProductsController : ControllerBase
     {
@@ -53,22 +53,20 @@ namespace OnlineShop.Controllers
             {
                 productsList = productsList.Reverse();
             }
-           
-            // Determine the number of items to display per page.
-            int itemsPerPage = pageSize;
+          
 
             // Calculate the total number of pages needed.
-            int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
             // Use the current page number and number of items per page to determine which items to display.
-            int startIndex = (pageNumber - 1) * itemsPerPage;
-            int endIndex = Math.Min(startIndex + itemsPerPage - 1, totalItems - 1);
+            int startIndex = (pageNumber - 1) * pageSize;
+            int endIndex = Math.Min(startIndex + pageSize - 1, totalItems - 1);
 
             // Add the appropriate pagination parameters to your API endpoint.
             var paginationHeader = new
             {
                 pageNumber,
-                itemsPerPage,
+                pageSize,
                 totalPages,
                 totalItems
             };
