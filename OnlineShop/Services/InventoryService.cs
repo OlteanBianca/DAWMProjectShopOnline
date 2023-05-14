@@ -15,7 +15,7 @@ namespace OnlineShop.Services
         public async Task<bool> AddToInventory(InventoryDTO inventoryDTO)
         {
             Product? product = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
-            Shop? shop = await _unitOfWork.Shops.GetById(inventoryDTO.ShopId);
+            Shop? shop = await _unitOfWork.Shops.GetByName(inventoryDTO.ShopName);
 
             if (product == null || shop == null)
             {
@@ -52,13 +52,14 @@ namespace OnlineShop.Services
         public async Task<bool> EditQuantity(InventoryDTO inventoryDTO)
         {
             Product? product = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
+            Shop? shop = await _unitOfWork.Shops.GetByName(inventoryDTO.ShopName);
 
-            if (product == null)
+            if (product == null || shop == null)
             {
                 return false;
             }
 
-            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(inventoryDTO.ShopId, product.Id);
+            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(shop.Id, product.Id);
 
             if (inventory == null)
             {
@@ -79,12 +80,14 @@ namespace OnlineShop.Services
         public async Task<bool> Remove(InventoryDTO inventoryDTO)
         {
             Product? product = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
-            if (product == null)
+            Shop? shop = await _unitOfWork.Shops.GetByName(inventoryDTO.ShopName);
+
+            if (product == null || shop == null)
             {
                 return false;
             }
 
-            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(inventoryDTO.ShopId, product.Id);
+            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(shop.Id, product.Id);
             if (inventory == null)
             {
                 return false;

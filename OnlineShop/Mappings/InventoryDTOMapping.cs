@@ -20,7 +20,7 @@ namespace OnlineShop.Mappings
 
             InventoryDTO inventoryDTO = new()
             {
-                ShopId = inventory.ShopId,
+                ShopName = inventory.Shop.Name,
                 ProductName = inventory.Product.Name,
                 Quantity = inventory.Quantity
             };

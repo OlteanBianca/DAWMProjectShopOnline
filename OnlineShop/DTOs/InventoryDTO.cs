@@ -6,9 +6,10 @@ namespace OnlineShop.DTOs
     {
         #region Properties
         [Required]
-        public int ShopId { get; set; }
+        public string ShopName { get; set; } = string.Empty;
+
         [Required]
-        public string ProductName { get; set; } = String.Empty;
+        public string ProductName { get; set; } = string.Empty;
 
         [Required, Range(0, 10000)]
         public int Quantity { get; set; }

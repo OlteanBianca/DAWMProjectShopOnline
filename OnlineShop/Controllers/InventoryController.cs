@@ -67,7 +67,7 @@ namespace OnlineShop.Controllers
         {
             if (inventoryDTO == null)
             {
-                return BadRequest("Inventory can't be null!");
+                return BadRequest("Quantity can't be null!");
             }
 
             if (!await _inventoryService.EditQuantity(inventoryDTO))
