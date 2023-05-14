@@ -7,9 +7,7 @@ namespace OnlineShop.Repositories
     public class UserRepository : BaseRepository<User>
     {
         #region Constructors
-        public UserRepository(ShopDbContext dbContext) : base(dbContext)
-        {
-        }
+        public UserRepository(ShopDbContext dbContext) : base(dbContext) { }
         #endregion
 
         #region Public Methods

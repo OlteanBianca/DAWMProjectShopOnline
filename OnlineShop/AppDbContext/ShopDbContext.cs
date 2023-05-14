@@ -22,14 +22,9 @@ namespace OnlineShop.AppDbContext
         #endregion
 
         #region Constructors
-        public ShopDbContext()
-        {
-        }
+        public ShopDbContext() { }
 
-        public ShopDbContext(DbContextOptions<ShopDbContext> options)
-            : base(options)
-        {
-        }
+        public ShopDbContext(DbContextOptions<ShopDbContext> options) : base(options) { }
         #endregion
     }
 }

@@ -7,15 +7,11 @@ namespace OnlineShop.Mappings
     {
         #region Entity To DTO
 
-        public static List<InventoryDTO> ToInventoryDTOs(this List<Inventory> inventory)
+        public static List<InventoryDTO> ToInventoryDTOs(this List<Inventory> inventories)
         {
-            var results = inventory.Select(e => e.ToInventoryDTO()).ToList();
+            inventories ??= new();
 
-            if (results.Any())
-            {
-                return results;
-            }
-            return new List<InventoryDTO>();
+            return inventories.Select(e => e.ToInventoryDTO()).ToList();
         }
 
         public static InventoryDTO ToInventoryDTO(this Inventory inventory)

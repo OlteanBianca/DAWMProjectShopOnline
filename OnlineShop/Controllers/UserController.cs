@@ -67,6 +67,7 @@ namespace OnlineShop.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetById(int id)
         {
             UserDTO? user = await _userService.GetUserById(id);

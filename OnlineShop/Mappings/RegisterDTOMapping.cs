@@ -13,7 +13,6 @@ namespace OnlineShop.Mappings
             User user = new()
             {
                 Email = registerData.Email,
-                RoleId = registerData.RoleId,
                 Password = registerData.Password,
                 Address = registerData.Address,
                 DateOfBirth = registerData.DateOfBirth,

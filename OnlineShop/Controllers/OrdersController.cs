@@ -82,14 +82,12 @@ namespace OnlineShop.Controllers
                 return NotFound("No user found!");
             }
 
-
             if (!await _orderService.AddOrder(orderDTO, (int)id))
             {
                 return BadRequest("Credentials not valid!");
             }
             return Ok("Order added successfully!");
         }
-
         #endregion
     }
 }

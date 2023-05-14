@@ -7,7 +7,7 @@ using OnlineShop.Services;
 namespace OnlineShop.Controllers
 {
     [ApiController]
-    [Route("products")]
+    [Route("product")]
     [Authorize(Roles = "ShopOwner")]
     public class ProductsController : ControllerBase
     {
@@ -23,46 +23,36 @@ namespace OnlineShop.Controllers
         #endregion
 
         #region Public Methods
-        [HttpPost("add")]   
+        [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] ProductDTO payload)
         {
-            var isUnique = await _productService.FindProductByName(payload.ProductName);
-
-            if (!isUnique)
+            if (!await _productService.FindProductByName(payload.ProductName))
             {
                 return BadRequest("Name cannot be null and must be unique!!");
             }
-
-            var result = await _productService.AddProduct(payload);
-
-            if (!result)
+            if (!await _productService.AddProduct(payload))
             {
                 return BadRequest("Product couldn't be added!");
             }
 
-            return Ok(result);
+            return Ok("Product added successfully!");
         }
 
         [HttpGet("get-all")]
         public async Task<ActionResult<List<ProductDTO>>> GetAll(int pageNumber = 1, int pageSize = 2, bool isDescending = false)
         {
-            var productsList = await _productService.GetAllProducts();
-            int totalItems = productsList.Count();
+            List<ProductDTO> productsList = await _productService.GetAllProducts();
+            int totalItems = productsList.Count;
 
             if (isDescending)
             {
-                productsList = productsList.Reverse();
+                productsList.Reverse();
             }
-          
 
-            // Calculate the total number of pages needed.
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
-            // Use the current page number and number of items per page to determine which items to display.
             int startIndex = (pageNumber - 1) * pageSize;
             int endIndex = Math.Min(startIndex + pageSize - 1, totalItems - 1);
 
-            // Add the appropriate pagination parameters to your API endpoint.
             var paginationHeader = new
             {
                 pageNumber,
@@ -72,44 +62,35 @@ namespace OnlineShop.Controllers
             };
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(paginationHeader));
 
-            // Update your API endpoint logic to retrieve the appropriate subset of data based on the pagination parameters.
-            var subset = productsList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList();
+            List<ProductDTO> subset = productsList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList();
 
             return Ok(subset);
-         
         }
 
         [HttpGet("get-by-id/{productId}")]
         public async Task<ActionResult<ProductDTO>> GetById(int productId)
         {
-            var result = await _productService.GetProductByID(productId);
-
-            return Ok(result);
+            return Ok(await _productService.GetProductByID(productId));
         }
 
         [HttpPatch("edit-price/{productId}")]
         public async Task<ActionResult<bool>> GetById(int productId, [FromBody] double price)
         {
-            var result = await _productService.Update(productId, price);
-
-            if (!result)
+            if (!await _productService.Update(productId, price))
             {
                 return BadRequest("Price could not be updated.");
             }
-
-            return result;
+            return Ok("Price updated successfully!");
         }
 
         [HttpDelete("delete-by-id/{productId}")]
         public async Task<IActionResult> Delete(int productId)
         {
-            var result = await _productService.Remove(productId);
-
-            if(!result)
+            if (!await _productService.Remove(productId))
             {
                 return BadRequest("Product couldn't be deleted!");
             }
-            return Ok();
+            return Ok("Product deleted successfully!");
         }
         #endregion
     }

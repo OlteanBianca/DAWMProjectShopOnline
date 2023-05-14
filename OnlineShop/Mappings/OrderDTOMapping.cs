@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Server.IIS.Core;
-using OnlineShop.DTOs;
+﻿using OnlineShop.DTOs;
 using OnlineShop.Entities;
 
 namespace OnlineShop.Mappings

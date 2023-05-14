@@ -6,13 +6,7 @@ namespace OnlineShop.Repositories
     public class RoleRepository : BaseRepository<Role>
     {
         #region Constructors
-        public RoleRepository(ShopDbContext dbContext) : base(dbContext)
-        {
-        }
-        #endregion
-
-        #region Public Methods
- 
+        public RoleRepository(ShopDbContext dbContext) : base(dbContext) { }
         #endregion
     }
 }

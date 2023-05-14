@@ -9,13 +9,9 @@ namespace OnlineShop.Mappings
 
         public static List<ProductDTO> ToProductDTOs(this List<Product> products)
         {
-            var results = products.Select(e => e.ToProductDTO()).ToList();
+            products ??= new();
 
-            if (results.Any())
-            {
-                return results;
-            }
-            return new List<ProductDTO>();
+            return products.Select(e => e.ToProductDTO()).ToList();
         }
 
         public static ProductDTO ToProductDTO(this Product product)

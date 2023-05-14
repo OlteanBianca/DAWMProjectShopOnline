@@ -13,8 +13,8 @@ namespace OnlineShop.Services
         }
         #endregion
 
-        #region Public Methods
-        public async Task<User?> AddUser(RegisterDTO registerData)
+        #region Private Methods
+        private async Task<User?> AddUser(RegisterDTO registerData)
         {
             User? user = registerData.ToUser();
             if (user == null)
@@ -24,15 +24,18 @@ namespace OnlineShop.Services
 
             var hashedPassword = _authService.HashPassword(registerData.Password);
             user.Password = hashedPassword;
+            user.RoleId = 1;
 
             user = await _unitOfWork.Users.Insert(user);
             await _unitOfWork.SaveChanges();
             return user;
         }
+        #endregion
 
+        #region Public Methods
         public async Task<LoginDTO?> Register(RegisterDTO registerData)
         {
-            if (registerData == null || !await IsRoleValid(registerData.RoleId))
+            if (registerData == null)
             {
                 return null;
             }
@@ -71,12 +74,6 @@ namespace OnlineShop.Services
         {
             User? user = await _unitOfWork.Users.GetById(id);
             return user?.ToUserDTO();
-        }
-
-        public async Task<bool> IsRoleValid(int id)
-        {
-            Role? role = await _unitOfWork.Roles.GetById(id);
-            return role != null;
         }
 
         public async Task<bool> UpdateUserToShopOwner(int id)

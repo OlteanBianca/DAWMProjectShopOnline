@@ -5,9 +5,6 @@ namespace OnlineShop.DTOs
     public class RegisterDTO
     {
         #region Properties
-        [Required]
-        public int RoleId { get; set; }
-
         [Required, MaxLength(50)]
         public string Name { get; set; } = string.Empty;
 

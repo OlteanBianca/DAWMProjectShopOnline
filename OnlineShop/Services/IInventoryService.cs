@@ -4,14 +4,14 @@ namespace OnlineShop.Services
 {
     public interface IInventoryService
     {
-        #region Properties
-        public Task<bool> AddToInventory(InventoryDTO inventoryDTO, int userId);
+        #region Public Methods
+        public Task<bool> AddToInventory(InventoryDTO inventoryDTO);
 
         public Task<Dictionary< string, List<InventoryDTO>>> GetAll(int userId);
 
-        public Task<bool> Remove(InventoryDTO inventoryDTO, int userId);
+        public Task<bool> Remove(InventoryDTO inventoryDTO);
 
-        public Task<bool> EditQuantity(InventoryDTO inventoryDTO, int userId);
+        public Task<bool> EditQuantity(InventoryDTO inventoryDTO);
         #endregion
     }
 }

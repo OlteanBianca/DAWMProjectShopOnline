@@ -13,6 +13,13 @@ namespace OnlineShop.Services
         }
         #endregion
 
+        #region Private Methods
+        private async Task<bool> CheckIfShopNameExists(string name)
+        {
+            return await _unitOfWork.Shops.CheckIfShopNameExists(name);
+        }
+        #endregion
+
         #region Public Methods
         public async Task<List<ShopDTO?>> GetAllShops()
         {
@@ -38,11 +45,6 @@ namespace OnlineShop.Services
             shop.UserId = userId;
             await _unitOfWork.Shops.Insert(shop);
             return await _unitOfWork.SaveChanges();
-        }
-
-        public async Task<bool> CheckIfShopNameExists(string name)
-        {
-            return await _unitOfWork.Shops.CheckIfShopNameExists(name);
         }
 
         public async Task<ShopDTO?> GetShopById(int id)

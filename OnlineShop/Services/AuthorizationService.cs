@@ -23,32 +23,28 @@ namespace OnlineShop.Services
         }
         #endregion
 
-        #region Public Methods
-        public string GetToken(User user, Role role)
+        #region Private Methods
+        private static bool ByteArraysEqual(byte[] a, byte[] b)
         {
-            JwtSecurityTokenHandler jwtTokenHandler = new();
-            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_securityKey));
-            SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
-
-            Claim roleClaim = new("role", role.RoleName);
-            Claim idClaim = new("userId", user.Id.ToString());
-            Claim infoClaim = new("username", user.Email);
-
-            var tokenDescriptior = new SecurityTokenDescriptor
+            if (ReferenceEquals(a, b))
             {
-                Issuer = "Backend",
-                Audience = "Frontend",
-                Subject = new ClaimsIdentity(new[] { roleClaim, idClaim, infoClaim }),
-                Expires = DateTime.Now.AddHours(2),
-                SigningCredentials = credentials
-            };
+                return true;
+            }
 
-            SecurityToken token = jwtTokenHandler.CreateToken(tokenDescriptior);
+            if (a == null || b == null || a.Length != b.Length)
+            {
+                return false;
+            }
 
-            return jwtTokenHandler.WriteToken(token);
+            var areSame = true;
+            for (var i = 0; i < a.Length; i++)
+            {
+                areSame &= (a[i] == b[i]);
+            }
+            return areSame;
         }
 
-        public bool ValidateToken(string tokenString)
+        private bool ValidateToken(string tokenString)
         {
             JwtSecurityTokenHandler jwtTokenHandler = new();
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_securityKey));
@@ -70,6 +66,36 @@ namespace OnlineShop.Services
 
             jwtTokenHandler.ValidateToken(tokenString, tokenValidationParameters, out var validatedToken);
             return validatedToken != null;
+        }
+        #endregion
+
+        #region Public Methods
+        public string GetToken(User user, Role role)
+        {
+            JwtSecurityTokenHandler jwtTokenHandler = new();
+            SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_securityKey));
+            SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
+
+            Claim roleClaim = new("role", role.RoleName);
+            Claim idClaim = new("userId", user.Id.ToString());
+            Claim infoClaim = new("username", user.Email);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = "Backend",
+                Audience = "Frontend",
+                Subject = new ClaimsIdentity(new[] { roleClaim, idClaim, infoClaim }),
+                Expires = DateTime.Now.AddHours(2),
+                SigningCredentials = credentials
+            };
+            SecurityToken token = jwtTokenHandler.CreateToken(tokenDescriptor);
+
+            string bearerToken = jwtTokenHandler.WriteToken(token);
+            if (!ValidateToken(bearerToken))
+            {
+                return "";
+            }
+            return bearerToken;
         }
 
         public int? GetUserFromToken(string token)
@@ -135,7 +161,7 @@ namespace OnlineShop.Services
             {
                 generatedSubkey = deriveBytes.GetBytes(PBKDF2SubkeyLength);
             }
-            return IAuthorizationService.ByteArraysEqual(storedSubkey, generatedSubkey);
+            return ByteArraysEqual(storedSubkey, generatedSubkey);
         }
         #endregion
     }

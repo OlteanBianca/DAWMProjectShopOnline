@@ -1,11 +1,10 @@
 ﻿using OnlineShop.DTOs;
-using OnlineShop.Entities;
 
 namespace OnlineShop.Services
 {
     public interface IOrderService
     {
-        #region Properties
+        #region Public Methods
         public Task<bool> AddOrder(AddOrderDTO orderDTO, int userId);
 
         public Task<List<OrderDTO>> GetAll();

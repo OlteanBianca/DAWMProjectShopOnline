@@ -1,6 +1,5 @@
 ﻿using OnlineShop.DTOs;
 using OnlineShop.Entities;
-using OnlineShop.Mappings;
 using OnlineShop.Repositories;
 
 namespace OnlineShop.Services
@@ -8,12 +7,12 @@ namespace OnlineShop.Services
     public class InventoryService : BaseService, IInventoryService
     {
         #region Constructors    
-        public InventoryService(UnitOfWork unitOfWork, IAuthorizationService authService) : base(unitOfWork, authService) {  }
+        public InventoryService(UnitOfWork unitOfWork, IAuthorizationService authService) : base(unitOfWork, authService) { }
 
         #endregion
 
         #region Public Methods
-        public async Task<bool> AddToInventory(InventoryDTO inventoryDTO, int userId)
+        public async Task<bool> AddToInventory(InventoryDTO inventoryDTO)
         {
             Product? product = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
             Shop? shop = await _unitOfWork.Shops.GetById(inventoryDTO.ShopId);
@@ -23,7 +22,7 @@ namespace OnlineShop.Services
                 return false;
             }
 
-            if(product.IsDeleted == true)
+            if (product.IsDeleted == true)
             {
                 return false;
             }
@@ -40,7 +39,6 @@ namespace OnlineShop.Services
                     ShopId = shop.Id,
                     Quantity = inventoryDTO.Quantity
                 };
-
                 await _unitOfWork.Inventories.Insert(newInventory);
             }
             else
@@ -48,20 +46,19 @@ namespace OnlineShop.Services
                 inventory.Quantity = inventoryDTO.Quantity;
                 _unitOfWork.Inventories.Update(inventory);
             }
-
             return await _unitOfWork.SaveChanges();
         }
 
-        public async Task<bool> EditQuantity(InventoryDTO inventoryDTO, int userId)
+        public async Task<bool> EditQuantity(InventoryDTO inventoryDTO)
         {
-            var result = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
+            Product? product = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
 
-            if (result == null)
+            if (product == null)
             {
                 return false;
             }
 
-            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(inventoryDTO.ShopId, result.Id);
+            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(inventoryDTO.ShopId, product.Id);
 
             if (inventory == null)
             {
@@ -79,18 +76,16 @@ namespace OnlineShop.Services
             return await _unitOfWork.Inventories.GetAll(userId);
         }
 
-        public async Task<bool> Remove(InventoryDTO inventoryDTO, int userId)
+        public async Task<bool> Remove(InventoryDTO inventoryDTO)
         {
-            var result = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
-
-            if(result == null)
+            Product? product = await _unitOfWork.Products.GetByName(inventoryDTO.ProductName);
+            if (product == null)
             {
                 return false;
             }
 
-            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(inventoryDTO.ShopId, result.Id);
-
-            if(inventory == null)
+            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(inventoryDTO.ShopId, product.Id);
+            if (inventory == null)
             {
                 return false;
             }

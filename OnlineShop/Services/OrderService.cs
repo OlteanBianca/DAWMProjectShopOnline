@@ -8,7 +8,48 @@ namespace OnlineShop.Services
     public class OrderService : BaseService, IOrderService
     {
         #region Constructors
-        public OrderService(UnitOfWork unitOfWork, IAuthorizationService authService) : base(unitOfWork, authService) { }
+        public OrderService(UnitOfWork unitOfWork, IAuthorizationService authService)
+            : base(unitOfWork, authService) { }
+        #endregion
+
+        #region Private Methods
+        private async Task<double> AddProductToOrder(OrderedProductDTO orderedProductDTO, int orderID)
+        {
+            Product? product = await _unitOfWork.Products.GetByName(orderedProductDTO.ProductName);
+            Shop? shop = await _unitOfWork.Shops.GetByName(orderedProductDTO.ShopName);
+
+            if (product == null || shop == null || orderedProductDTO.Quantity == 0)
+            {
+                return 0;
+            }
+
+            if (!await _unitOfWork.Inventories.IsQuantityInInventory(shop.Id, product.Id, orderedProductDTO.Quantity))
+            {
+                return 0;
+            }
+
+            Inventory? inventory = await _unitOfWork.Inventories.GetByShopIdAndProductId(shop.Id, product.Id);
+
+            if (inventory == null)
+            {
+                return 0;
+            }
+
+            inventory.Quantity -= orderedProductDTO.Quantity;
+            _unitOfWork.Inventories.Update(inventory);
+
+            OrderedProduct orderedProduct = new()
+            {
+                ProductId = product.Id,
+                ShopId = shop.Id,
+                Quantity = orderedProductDTO.Quantity,
+                OrderId = orderID
+            };
+
+            await _unitOfWork.OrderedProducts.Insert(orderedProduct);
+            await _unitOfWork.SaveChanges();
+            return orderedProduct.Quantity * product.Price;
+        }
         #endregion
 
         #region Public Methods
@@ -36,29 +77,6 @@ namespace OnlineShop.Services
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.SaveChanges();
             return true;
-        }
-
-        public async Task<double> AddProductToOrder(OrderedProductDTO orderedProductDTO, int orderID)
-        {
-            Product? product = await _unitOfWork.Products.GetByName(orderedProductDTO.ProductName);
-            Shop? shop = await _unitOfWork.Shops.GetByName(orderedProductDTO.ShopName);
-
-            if (product == null || shop == null || orderedProductDTO.Quantity == 0)
-            {
-                return 0;
-            }
-
-            OrderedProduct orderedProduct = new()
-            {
-                ProductId = product.Id,
-                ShopId = shop.Id,
-                Quantity = orderedProductDTO.Quantity,
-                OrderId = orderID
-            };
-
-            await _unitOfWork.OrderedProducts.Insert(orderedProduct);
-            await _unitOfWork.SaveChanges();
-            return orderedProduct.Quantity * product.Price;
         }
 
         public async Task<List<OrderDTO>> GetAll()

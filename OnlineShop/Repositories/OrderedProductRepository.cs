@@ -8,6 +8,5 @@ namespace OnlineShop.Repositories
         #region Constructors
         public OrderedProductRepository(ShopDbContext dbContext) : base(dbContext) { }
         #endregion
-
     }
 }

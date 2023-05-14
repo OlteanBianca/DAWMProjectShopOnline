@@ -1,12 +1,10 @@
-﻿using OnlineShop.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.DTOs
 {
     public class InventoryDTO
     {
         #region Properties
-
         [Required]
         public int ShopId { get; set; }
         [Required]
@@ -14,7 +12,6 @@ namespace OnlineShop.DTOs
 
         [Required, Range(0, 10000)]
         public int Quantity { get; set; }
-
         #endregion
     }
 }
